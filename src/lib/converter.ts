@@ -163,7 +163,7 @@ function liftInlineSchemas(spec: Spec): Record<string, Schema> {
         };
 
         operation.parameters.forEach((param: Parameter) => {
-          if (param.in === 'query' || param.in === 'header') {
+          if (param.in === 'query') {
             if (paramsSchema.properties) {
               paramsSchema.properties[param.name] = param.schema || {};
               if (param.description) {
