@@ -11,7 +11,16 @@ interface Schema {
   $ref?: string;
 }
 
+interface Parameter {
+  name: string;
+  in: 'query' | 'header' | 'path' | 'cookie';
+  description?: string;
+  required?: boolean;
+  schema?: Schema;
+}
+
 interface Operation {
+  parameters?: Parameter[];
   requestBody?: {
     content: {
       [mediaType: string]: {
@@ -144,7 +153,34 @@ function liftInlineSchemas(spec: Spec): Record<string, Schema> {
           }
         }
       }
-    
+
+      // Handle parameters for GET, etc.
+      if (operation.parameters) {
+        const paramsSchema: Schema = {
+          type: 'object',
+          properties: {},
+          required: [],
+        };
+
+        operation.parameters.forEach((param: Parameter) => {
+          if (param.in === 'query' || param.in === 'header') {
+            if (paramsSchema.properties) {
+              paramsSchema.properties[param.name] = param.schema || {};
+              if (param.description) {
+                paramsSchema.properties[param.name].description = param.description;
+              }
+            }
+            if (param.required) {
+              paramsSchema.required?.push(param.name);
+            }
+          }
+        });
+
+        if (Object.keys(paramsSchema.properties || {}).length > 0) {
+          const schemaName = generateNameFromPath(path);
+          schemas[schemaName] = paramsSchema;
+        }
+      }
     });
   }
   return schemas;
