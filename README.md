@@ -1,69 +1,48 @@
-# React + TypeScript + Vite
+# OpenAPI to TypeScript Interface Generator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web-based tool to automatically generate TypeScript interfaces from an OpenAPI (v2/v3) specification.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Multiple Input Methods**: Paste your spec directly, or fetch it from a public URL.
+- **Broad Compatibility**: Supports both JSON and YAML formats for OpenAPI v2 (Swagger) and v3.
+- **Smart Schema Detection**: Automatically finds and processes schemas, whether they are in the standard `components/schemas` section or defined inline within API paths.
+- **Intelligent Naming**: Generates clean, readable interface names (e.g., `LoginParams`) from API paths.
+- **Accurate Type Generation**:
+    - Correctly maps OpenAPI data types to TypeScript types.
+    - Handles `required` fields to generate mandatory or optional (`?`) properties.
+    - Supports `enum` types, generating corresponding union types.
+    - Resolves `$ref` references between schemas.
+- **Rich Output**:
+    - Generates JSDoc comments from `description` fields in the spec.
+    - Displays the generated code with syntax highlighting.
+    - Provides a "Copy to Clipboard" button for convenience.
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Framework**: React (with Hooks)
+- **Language**: TypeScript
+- **Build Tool**: Vite
+- **Styling**: TailwindCSS v4
+- **Parsing**: `js-yaml`
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🚀 How to Use
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+1.  **Clone the repository**
+    ```bash
+    git clone <repository-url>
+    cd spec-to-ts
+    ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+2.  **Install dependencies**
+    This project uses `pnpm` as the package manager.
+    ```bash
+    pnpm install
+    ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+3.  **Run the development server**
+    ```bash
+    pnpm run dev
+    ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+4.  Open your browser and navigate to `http://localhost:5173` (or the port specified in your terminal).
